@@ -1,0 +1,10 @@
+#!/bin/sh
+/usr/bin/mysql-init
+/usr/sbin/sshd
+/etc/init.d/mysql start
+tail -f /var/log/mysql/error.log
+
+# chown -R mysql:mysql /var/lib/mysql/*
+# mysql_install_db
+# /usr/bin/mysql-init
+

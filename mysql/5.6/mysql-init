@@ -1,0 +1,17 @@
+#!/bin/sh
+#cp /usr/bin/my.cnf /etc/mysql/my.cnf
+/etc/init.d/mysql start
+sleep 5
+mysql -u root -e " \
+SET PASSWORD = PASSWORD('1'); \
+UPDATE mysql.user SET password = PASSWORD('1') WHERE user = 'root'; \
+DELETE FROM mysql.user WHERE user = ''; \
+GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY '1' WITH GRANT OPTION; \
+GRANT REPLICATION SLAVE ON *.* TO 'repl'@'%' IDENTIFIED BY 'repl'; \
+GRANT ALL ON *.* TO 'fabric'@'%' IDENTIFIED BY 'fabric'; \
+GRANT SELECT, SHOW DATABASES, SUPER, REPLICATION CLIENT, PROCESS ON *.* TO 'mem'@'%' IDENTIFIED BY 'mem'"
+#cd /tmp/mysql-sys
+#mysql -u root -pmysql < sys_56.sql
+cd ~
+rm -rf /tmp/mysql-sys
+/etc/init.d/mysql stop

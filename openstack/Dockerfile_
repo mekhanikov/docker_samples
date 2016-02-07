@@ -1,0 +1,40 @@
+FROM ubuntu
+
+# ADD http://dev.mysql.com/get/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb /tmp/
+# RUN DEBIAN_FRONTEND=noninteractive dpkg -i /tmp/mysql-apt-config_0.1.5-2ubuntu14.04_all.deb
+# RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install ssh mysql-server git
+# ADD my.cnf /etc/mysql/my.cnf
+# ADD mysql-init /usr/bin/mysql-init
+# RUN chmod +x /usr/bin/mysql-init
+# RUN /usr/bin/mysql-init
+# ADD mysql-start /usr/bin/mysql-start
+# RUN chmod +x /usr/bin/mysql-start
+# EXPOSE 22 3306
+# ENTRYPOINT ["/usr/bin/mysql-start"]
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install  git bsdmainutils python python-pip
+#  && apt-get -y upgrade
+
+#RUN groupadd -r postgres && useradd -r -g postgres postgres
+RUN adduser --disabled-password --gecos '' r
+RUN adduser r sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+RUN git clone -b stable/kilo https://github.com/openstack-dev/devstack.git
+RUN chown -R r:r devstack
+RUN pip install --user os-testr
+RUN pip install --user  pip==8.0.2
+#RUN pip install --user  --upgrade pip
+USER r
+RUN pip install --user  testrepository
+
+RUN pip install testrepository
+#RUN pip install --upgrade pip
+#RUN su - r -c "pip install --user  --upgrade pip"
+
+
+#RUN su - r -c /devstack/stack.sh
+WORKDIR devstack
+#COPY local.conf .
+COPY localrc .
+RUN ./stack.sh
+

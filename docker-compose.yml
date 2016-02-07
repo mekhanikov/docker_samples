@@ -1,0 +1,11 @@
+sonarqube:
+  build: ./sonarqube
+  links:
+   - mysql
+  ports:
+   - "9000:9000"
+
+
+mysql:
+  build: ./mysql/5.6
+

@@ -1,0 +1,12 @@
+#!/bin/bash
+docker rmi $(docker images -a -q)
+
+cd mysql/5.6
+docker build -t emekhanikov/mysql56 .
+cd ../..
+pwd
+ls -lah
+cd app
+pwd
+ls -lah
+docker build -t emekhanikov/app .
