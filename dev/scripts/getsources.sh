@@ -30,7 +30,7 @@ DEBIAN_FRONTEND=noninteractive sudo apt-get update && DEBIAN_FRONTEND=noninterac
 sudo apt-get -y update
 sudo apt-get -y install docker-engine
 
-echo "DOCKER_OPTS='-G vagrant'"  | sudo tee --append /etc/default/docker
+echo "DOCKER_OPTS='-G vagrant'" | sudo tee --append /etc/default/docker
 sudo restart docker
 
 sudo apt-get -y install git git-review python-pip python-dev

@@ -7,6 +7,11 @@ Vagrant.configure("2") do |config|
     lxc.customize 'cgroup.devices.allow', 'b 7:* rwm'
     lxc.customize 'cgroup.devices.allow', 'c 10:237 rwm'
     lxc.customize 'cgroup.devices.deny', ''
+
+lxc.customize 'aa_profile', 'unconfined'
+lxc.customize 'cgroup.devices.allow', 'a'
+lxc.customize 'cap.drop', ''
+
   end
 
 config.vm.synced_folder ".", "/svr/openstack-deploy-scripts"
