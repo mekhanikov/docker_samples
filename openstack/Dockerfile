@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y git bsdmainutils python python-pip
 
 RUN git clone -b stable/liberty https://github.com/openstack-dev/devstack.git
 
-COPY localrc /devstack/localrc
-#COPY local.conf /devstack/local.conf
+#COPY localrc /devstack/localrc
+COPY local.conf /devstack/local.conf
 
 
 

@@ -1,9 +1,16 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "fgrehm/trusty64-lxc"
-  config.vm.network "private_network", ip: "192.168.10.5", lxc__bridge_name: 'vlxcbr1'
+
+  config.vm.network "private_network", ip: "192.168.59.105", lxc__bridge_name: 'vlxcbr1'
+  #config.vm.network "private_network", ip: "192.168.59.105"
   config.vm.provider :lxc do |lxc|
-    # Same effect as 'customize ["modifyvm", :id, "--memory", "1024"]' for VirtualBox
-    lxc.customize 'cgroup.memory.limit_in_bytes', '1024M'
+#  config.vm.define "n1" do |node|
+#    #node.vm.network "private_network", :adapter=>2, ip: "192.168.1.1",virtualbox__intnet: "cluster", lxc__bridge_name:'cluster'
+#    #node.vm.network "private_network", :adapter=>3, ip: "192.168.0.1",virtualbox__intnet: "private", lxc__bridge_name:'private'
+#    config.vm.network :private_network, ip: "172.20.10.3", lxc__bridge_name: 'vlxcbr1'
+#  end
+    # Same effect as 'customize ["modifyvm", :id, "--memory", "5024"]' for VirtualBox
+    lxc.customize 'cgroup.memory.limit_in_bytes', '5024M'
     lxc.customize 'cgroup.devices.allow', 'b 7:* rwm'
     lxc.customize 'cgroup.devices.allow', 'c 10:237 rwm'
     lxc.customize 'cgroup.devices.deny', ''

@@ -43,13 +43,10 @@ sudo apt-get -y install git git-review python-pip python-dev
 ##sudo mkdir -p /opt/stack
 git clone https://git.openstack.org/openstack/nova-docker
 cd nova-docker
-## Check out a different version if not using master, i.e:
-#git checkout stable/liberty && sudo git pull --ff-only origin stable/liberty
 git checkout stable/liberty
-git pull --ff-only origin stable/liberty
-##pip install .  # The linecache2 error appears to be benign
-#pip install --user .
+git checkout 113e78f91573447ede534b2f334e04c86533e8ea
 sudo pip install .
+
 cd /home/vagrant/prj
 #sudo apt-get -y install qemu-system-x86
 #sudo apt-get -y install qemu-kvm
@@ -59,10 +56,14 @@ sudo pip install 'requests!=2.4.0,<2.8.0,>=2.2.0'
 sudo pip install 'fileutils'
 git clone -b stable/liberty https://github.com/openstack-dev/devstack.git
 cd devstack
-exit 0
+git checkout 501bb07462ef4fbe81143f0a58364ada0da48fe2
+#sudo pip install 'stevedore<1.4.0,>=1.3.0'
+#sudo pip install 'requests!=2.4.0,<2.8.0,>=2.2.0'
+#sudo pip install 'fileutils'
 ##cp ../openstack-deploy-scripts/dev/scripts/localrc ./localrc
-#cp ../openstack-deploy-scripts/dev/scripts/local.conf ./local.conf
+cp ../openstack-deploy-scripts/dev/scripts/local.conf ./local.conf
 ./stack.sh
+
 sudo cp /home/vagrant/prj/nova-docker/etc/nova/rootwrap.d/docker.filters /etc/nova/rootwrap.d/
         
 . openrc admin
@@ -75,35 +76,22 @@ docker save larsks/thttpd |
 . openrc demo
 nova boot --image larsks/thttpd --flavor m1.small test0
 
-exit 0
-#export OS_TENANT_ID=4a3661eacc79472d8c11d714cd6e21ed
-export OS_AUTH_URL=http://192.168.10.5:5000/v2.0
-export OS_TENANT_NAME="demo"
-export OS_USERNAME="admin"
-export OS_PASSWORD=openstack
-export OS_REGION_NAME="RegionOne"
-#glance image-create --name "fluffy-1.0.0-x86_64" --disk-format qcow2 --container-format bare --is-public True --progress < /home/vagrant/prj/openstack-deploy-scripts/fluffy.qcow2
 
-#nova boot --flavor m1.heat --image fluffy-1.0.0-x86_64 --security-group default  fluffy-instance
-#export LANGUAGE=en_US.UTF-8
-#export LANG=en_US.UTF-8
-#export LC_ALL=en_US.UTF-8
-#locale-gen en_US.UTF-8
-#sudo dpkg-reconfigure locales
+nova floating-ip-create
+nova floating-ip-associate test0 172.24.4.3
 
-source ~/prj/devstack/openrc
+nova list
+
+
+nova secgroup-add-rule default tcp 80 80 0.0.0.0/0
 nova secgroup-add-rule default tcp 22 22 0.0.0.0/0
 nova secgroup-add-rule default icmp -1 -1 0.0.0.0/0
-neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8
-nova floating-ip-create
-#sudo iptables-save > iptables.rules
-#sudo iptables -P INPUT ACCEPT
-#sudo iptables -P OUTPUT ACCEPT
-#sudo iptables -P FORWARD ACCEPT
-#sudo iptables -F
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+neutron subnet-update private-subnet --dns_nameservers list=true 8.8.8.8
 
-sudo modprobe nbd
+#sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+#sudo modprobe nbd
+
 #sudo apt-get install mysql-server-5.6
 # ./integration_tests.sh
 # line="@reboot /home/vagrant/prj/openstack-deploy-scripts/onstart.sh"
