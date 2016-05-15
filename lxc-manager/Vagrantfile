@@ -1,0 +1,16 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "fgrehm/trusty64-lxc"
+  config.vm.hostname = "lxc-manager"
+  config.vm.network "private_network", ip: "192.167.59.107", lxc__bridge_name: 'vlxcbr1'
+  config.vm.provider :lxc do |lxc|
+    #lxc.customize ['modifyvm', :id, '--name', 'lxc-manager']
+    # Same effect as 'customize ["modifyvm", :id, "--memory", "768"]' for VirtualBox
+    lxc.customize 'cgroup.memory.limit_in_bytes', '768M'
+    lxc.customize 'cgroup.devices.allow', 'b 7:* rwm'
+    lxc.customize 'cgroup.devices.allow', 'c 10:237 rwm'
+    lxc.customize 'cgroup.devices.deny', ''
+    lxc.customize 'aa_profile', 'unconfined'
+    lxc.customize 'cgroup.devices.allow', 'a'
+    lxc.customize 'cap.drop', ''
+  end
+end
