@@ -4,3 +4,4 @@
 ./run_swarm_lxc_nodes.sh
 ./launch_docker_machines.sh
 ./upload_certs.sh
+./prepare_cluster.sh
