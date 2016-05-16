@@ -6,6 +6,7 @@ THIS_DIR=`dirname $0`
 ABSPATH=$(cd "$(dirname "$0")"; pwd)
 PRJ_ROOT=${ABSPATH}/../../../
 
+cd certs
 openssl genrsa -out ca-priv-key.pem 2048
 #openssl req -config /usr/lib/ssl/openssl.cnf -new -key ca-priv-key.pem -x509 -days 1825 -out ca.pem
 openssl req -config /usr/lib/ssl/openssl.cnf -new -key ca-priv-key.pem -x509 -days 1825 -out ca.pem -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
@@ -35,3 +36,5 @@ chmod 0600  *.pem
 
 
 ls -lah
+
+cd ..
