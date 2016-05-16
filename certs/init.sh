@@ -31,7 +31,7 @@ openssl x509 -req -days 1825 -in manager.csr -CA ca.pem -CAkey ca-priv-key.pem -
 openssl rsa -in manager-priv-key.pem -out manager-priv-key.pem
 
 
-
+chmod 0600  *.pem
 
 
 ls -lah
