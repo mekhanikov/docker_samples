@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "fgrehm/trusty64-lxc"
-  config.vm.hostname = "lxc-agent1"
+  config.vm.hostname = "agent1"
   config.vm.network "private_network", ip: "192.164.59.108", lxc__bridge_name: 'vlxcbr2'
   config.vm.provider :lxc do |lxc|
     #lxc.customize ['modifyvm', :id, '--name', 'lxc-agent1']

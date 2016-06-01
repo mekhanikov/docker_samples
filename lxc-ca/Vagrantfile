@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "fgrehm/trusty64-lxc"
-  config.vm.hostname = "lxc-ca"
+  config.vm.hostname = "ca"
   config.vm.network "private_network", ip: "192.161.59.101", lxc__bridge_name: 'vlxcbr7'
   config.vm.provider :lxc do |lxc|
     # Same effect as 'customize ["modifyvm", :id, "--memory", "768"]' for VirtualBox
@@ -12,7 +12,8 @@ Vagrant.configure("2") do |config|
     lxc.customize 'cgroup.devices.allow', 'a'
     lxc.customize 'cap.drop', ''
   end
-  #config.vm.synced_folder ".", "/svr/lxc"
-  #config.vm.provision :shell, :inline => "mkdir -p /home/vagrant/prj; cp -r /svr/lxc/. /home/vagrant/prj/lxc/", :privileged => false
-  #config.vm.provision :shell, :inline => "cd /home/vagrant/prj/lxc; pwd; ls -lah; scripts/init.sh", :privileged => true
+  config.vm.synced_folder "../certs", "/certs"
+  config.vm.synced_folder ".", "/svr/lxc"
+  config.vm.provision :shell, :inline => "mkdir -p /home/vagrant/prj; cp -r /svr/lxc/. /home/vagrant/prj/lxc/", :privileged => false
+  config.vm.provision :shell, :inline => "cd /home/vagrant/prj/lxc; pwd; ls -lah; ./create_certs.sh", :privileged => true
 end
